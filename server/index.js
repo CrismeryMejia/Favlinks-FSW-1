@@ -1,6 +1,8 @@
 const express = require('express')
-
+const cors = require('cors')
+const db = require('./db')
 const path = require('path')
+
 const app = express();
 
 const clientPath = path.resolve(__dirname, '../client/dist')
@@ -10,6 +12,16 @@ app.get('/', (req, res) => {
   // we'll do some stuff here
   res.sendFile(path.resolve(__dirname, '../client/dist', 'index.html'))
 })
+
+app.get('/api/links', db.getLinks)
+app.post('/api/links', db.createLink);
+app.post('/api/links/:id', db.updateLink);
+app.post('/api/links/:id', db.deleteLink);
+
+app.use(express.json())
+app.use(cors())
+
+app.get('/api/links', db.getLinks)
 
 const PORT = 3000;
 app.listen(PORT, () => {
